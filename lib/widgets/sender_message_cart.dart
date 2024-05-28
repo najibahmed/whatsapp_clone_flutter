@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../constants/colors.dart';
+import '../common/utils/colors.dart';
 
 class SenderMessageCart extends StatelessWidget {
   final String message;

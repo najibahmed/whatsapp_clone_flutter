@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapp_clone_flutter/constants/colors.dart';
+import 'package:whatsapp_clone_flutter/common/utils/colors.dart';
 import 'package:whatsapp_clone_flutter/info.dart';
 import 'package:whatsapp_clone_flutter/widgets/chat_list.dart';
 

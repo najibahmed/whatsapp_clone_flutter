@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:whatsapp_clone_flutter/widgets/contact_list.dart';
 
-import '../constants/colors.dart';
+import '../common/utils/colors.dart';
 import '../widgets/chat_list.dart';
 import '../widgets/web_chat_app_bar.dart';
 import '../widgets/web_profile_bar.dart';
