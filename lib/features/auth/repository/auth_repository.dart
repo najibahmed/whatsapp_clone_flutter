@@ -2,12 +2,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone_flutter/common/utils/utils.dart';
 import 'package:whatsapp_clone_flutter/features/auth/screens/otp_screen.dart';
-
+import 'package:whatsapp_clone_flutter/screens/mobile_screen_layout.dart';
 import '../../../common/repositories/common_firebase_storage_repo.dart';
 import '../../../models/user_model.dart';
 import '../screens/user_information_screen.dart';
@@ -22,6 +21,16 @@ class AuthRepository {
   final FirebaseFirestore firestore;
 
   AuthRepository({required this.auth, required this.firestore});
+
+  Future<UserModel?> getCurrentUserData() async {
+    var userData =
+        await firestore.collection('users').doc(auth.currentUser?.uid).get();
+    UserModel? user;
+    if (userData.data() != null) {
+      user = UserModel.fromMap(userData.data()!);
+    }
+    return user;
+  }
 
   void signInWithPhone(BuildContext context, String phoneNumber) async {
     try {
@@ -61,7 +70,7 @@ class AuthRepository {
       Navigator.pushNamedAndRemoveUntil(
         context,
         UserInformationScreen.routeName,
-            (route) => false,
+        (route) => false,
       );
     } on FirebaseAuthException catch (e) {
       showSnackBar(context: context, content: e.message!);
@@ -76,38 +85,52 @@ class AuthRepository {
   }) async {
     try {
       String uid = auth.currentUser!.uid;
-      String photoUrl= 'https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?auto=compress%2Cformat&ixlib=php-3.3.0';
-      if(profilePic!=null){
+      String photoUrl =
+          'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png';
+
+      if (profilePic != null) {
         photoUrl = await ref
             .read(commonFirebaseStorageRepositoryProvider)
             .storeFileToFirebase(
           'profilePic/$uid',
           profilePic,
         );
-        var user = UserModel(
-          name: name,
-          uid: uid,
-          profilePic: photoUrl,
-          isOnline: true,
-          phoneNumber: auth.currentUser!.phoneNumber!,
-          groupId: [],
-        );
-
-        await firestore.collection('users').doc(uid).set(user.toMap());
-
-        // Navigator.pushAndRemoveUntil(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const MobileLayoutScreen(),
-        //   ),
-        //       (route) => false,
-        // );
       }
+
+      var user = UserModel(
+        name: name,
+        uid: uid,
+        profilePic: photoUrl,
+        isOnline: true,
+        phoneNumber: auth.currentUser!.phoneNumber!,
+        groupId: [],
+      );
+
+      await firestore.collection('users').doc(uid).set(user.toMap());
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MobileScreenLayout(),
+        ),
+            (route) => false,
+      );
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }
   }
 
+  Stream<UserModel> userData(String userId) {
+    return firestore.collection('users').doc(userId).snapshots().map(
+          (event) => UserModel.fromMap(
+        event.data()!,
+      ),
+    );
+  }
 
-
+  void setUserState(bool isOnline) async {
+    await firestore.collection('users').doc(auth.currentUser!.uid).update({
+      'isOnline': isOnline,
+    });
+  }
 }

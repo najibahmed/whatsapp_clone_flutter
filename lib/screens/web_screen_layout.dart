@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:whatsapp_clone_flutter/widgets/contact_list.dart';
+import 'package:whatsapp_clone_flutter/features/chat/widgets/contact_list.dart';
 
 import '../common/utils/colors.dart';
-import '../widgets/chat_list.dart';
+import '../features/chat/widgets/chat_list.dart';
 import '../widgets/web_chat_app_bar.dart';
 import '../widgets/web_profile_bar.dart';
 import '../widgets/web_search_bar.dart';
@@ -72,7 +72,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               WebChatAppBar(),
 
               /// chat list
-              Expanded(child: ChatList()),
+              Expanded(child: ChatList(recieverUserId: '',)),
 
               /// Message input box
               Container(

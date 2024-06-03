@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../common/utils/colors.dart';
 import '../../../common/widgets/custom_button.dart';
-import '../../auth/screens/login_screen.dart';
+import '../../features/auth/screens/login_screen.dart';
 
 
 class LandingScreen extends StatelessWidget {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp_clone_flutter/common/utils/colors.dart';
-import 'package:whatsapp_clone_flutter/widgets/contact_list.dart';
+import 'package:whatsapp_clone_flutter/features/select_contact/screens/select_contact_screen.dart';
+import 'package:whatsapp_clone_flutter/features/chat/widgets/contact_list.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({super.key});
@@ -22,7 +23,9 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: FloatingActionButton(
             backgroundColor: tabColor,
-            onPressed:(){} ,
+            onPressed:(){
+              Navigator.pushNamed(context, SelectContactScreen.routeName);
+            } ,
             child: Icon(Icons.add_comment,color:Colors.black ,),
 
           ),
@@ -109,7 +112,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             //   ],
             // ),
           ),
-          body: const ContactList(),
+          body:  const ContactList(),
         ));
   }
 }

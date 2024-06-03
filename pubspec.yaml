@@ -44,7 +44,9 @@ dependencies:
   country_picker: ^2.0.26
   flutter_riverpod: ^2.5.1
   file_picker: ^8.0.3
-
+  flutter_contacts: ^1.1.8
+  uuid: ^4.4.0
+  intl:
 dev_dependencies:
   flutter_test:
     sdk: flutter
