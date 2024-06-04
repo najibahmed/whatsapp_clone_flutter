@@ -6,9 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:whatsapp_clone_flutter/common/widgets/loader.dart';
 import 'package:whatsapp_clone_flutter/features/chat/controller/chat_controller.dart';
 import 'package:whatsapp_clone_flutter/models/message_model.dart';
-import 'package:whatsapp_clone_flutter/widgets/sender_message_cart.dart';
-import '../../../widgets/my_message_card.dart';
-
+import 'package:whatsapp_clone_flutter/features/chat/widgets/sender_message_cart.dart';
+import 'my_message_card.dart';
 
 class ChatList extends ConsumerStatefulWidget {
   final String recieverUserId;
@@ -27,39 +26,43 @@ class _ChatListState extends ConsumerState<ChatList> {
     messageController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Message>>(
-        stream:ref.read(chatControllerProvider).chatStream(widget.recieverUserId),
-        builder: (context,snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting){
+        stream:
+            ref.read(chatControllerProvider).chatStream(widget.recieverUserId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Loader();
           }
           SchedulerBinding.instance.addPostFrameCallback((_) {
-            messageController.jumpTo(messageController.position.maxScrollExtent);
+            messageController
+                .jumpTo(messageController.position.maxScrollExtent);
           });
           return ListView.builder(
-            controller: messageController,
+              controller: messageController,
               itemCount: snapshot.data!.length,
-              itemBuilder: (context,index){
-                final messageData= snapshot.data![index];
-                var timeSent= DateFormat('Hm').format(messageData.timeSent);
-                if(messageData.senderId == FirebaseAuth.instance.currentUser!.uid){
+              itemBuilder: (context, index) {
+                final messageData = snapshot.data![index];
+                var timeSent = DateFormat('Hm').format(messageData.timeSent);
+                if (messageData.senderId ==
+                    FirebaseAuth.instance.currentUser!.uid) {
                   /// My message card
-                  return  MyMessageCard(date:timeSent , message: messageData.text);
+                  return MyMessageCard(
+                    date: timeSent,
+                    message: messageData.text,
+                    type: messageData.type,
+                  );
                 }
+
                 /// Sender message card
-                return SenderMessageCart(date:timeSent , message: messageData.text);
-              }
-          );
-        }
-    );
+                return SenderMessageCart(
+                  date: timeSent,
+                  message: messageData.text,
+                  type: messageData.type,
+                );
+              });
+        });
   }
 }
-
-
-
-
-
-
-

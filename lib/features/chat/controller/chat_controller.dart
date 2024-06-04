@@ -1,9 +1,9 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:whatsapp_clone_flutter/common/utils/colors.dart';
 import 'package:whatsapp_clone_flutter/features/auth/controller/auth_controller.dart';
 import 'package:whatsapp_clone_flutter/features/chat/repository/chat_repository.dart';
-
+import '../../../common/enums/message_enum.dart';
 import '../../../models/chat_contact.dart';
 import '../../../models/message_model.dart';
 
@@ -39,4 +39,46 @@ class ChatController {
               senderUser: value!),
         );
   }
+
+  void sendFileMessage(
+      BuildContext context,
+      File file,
+      String recieverUserId,
+      MessageEnum messageEnum,
+      ) {
+    ref.read(userDataAuthProvider).whenData(
+          (value) => chatRepository.sendFileMessage(
+          context: context,
+          recieverUserId: recieverUserId,
+          senderUserData: value!,
+          file: file,
+          ref: ref,
+          messageEnum: messageEnum),
+    );
+  }
+
+  void sendGIFMessage(
+      BuildContext context,
+      String gifUrl,
+      String recieverUserId,
+      // bool isGroupChat,
+      ) {
+    // final messageReply = ref.read(messageReplyProvider);
+    int gifUrlPartIndex = gifUrl.lastIndexOf('-') + 1;
+    String gifUrlPart = gifUrl.substring(gifUrlPartIndex);
+    String newgifUrl = 'https://i.giphy.com/media/$gifUrlPart/200.gif';
+
+    ref.read(userDataAuthProvider).whenData(
+          (value) => chatRepository.sendGIFMessage(
+        context: context,
+        gifUrl: newgifUrl,
+        recieverUserId: recieverUserId,
+        senderUser: value!,
+        // messageReply: messageReply,
+        // isGroupChat: isGroupChat,
+      ),
+    );
+    // ref.read(messageReplyProvider.state).update((state) => null);
+  }
+
 }
