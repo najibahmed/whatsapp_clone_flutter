@@ -6,9 +6,11 @@ import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../common/enums/message_enum.dart';
+import '../../../common/provider/message_reply_provider.dart';
 import '../../../common/utils/colors.dart';
 import '../../../common/utils/utils.dart';
 import '../controller/chat_controller.dart';
+import 'message_reply_preview.dart';
 
 class BottomChatField extends ConsumerStatefulWidget {
   final String recieverUserId;
@@ -154,11 +156,11 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
 
   @override
   Widget build(BuildContext context) {
-    // final messageReply = ref.watch(messageReplyProvider);
-    // final isShowMessageReply = messageReply != null;
+    final messageReply = ref.watch(messageReplyProvider);
+    final isShowMessageReply = messageReply != null;
     return Column(
       children: [
-        // isShowMessageReply ? const MessageReplyPreview() : const SizedBox(),
+        isShowMessageReply ? const MessageReplyPreview() : const SizedBox(),
         Row(
           children: [
             Expanded(

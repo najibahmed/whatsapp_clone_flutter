@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import 'package:whatsapp_clone_flutter/common/provider/message_reply_provider.dart';
 import 'package:whatsapp_clone_flutter/common/repositories/common_firebase_storage_repo.dart';
 import 'package:whatsapp_clone_flutter/common/utils/utils.dart';
 import 'package:whatsapp_clone_flutter/models/chat_contact.dart';
@@ -92,7 +93,10 @@ class ChatRepository {
       required String username,
       required String senderUsername,
       required String? recieverUserName,
-      required MessageEnum messageType}) async {
+      required MessageEnum messageType,
+      required MessageReply? messageReply,
+
+      }) async {
     final message = Message(
       senderId: auth.currentUser!.uid,
       recieverid: recieverUserId,
@@ -101,6 +105,17 @@ class ChatRepository {
       timeSent: timeSent,
       messageId: messageId,
       isSeen: false,
+      repliedMessage: messageReply== null
+          ? ''
+          : messageReply.message,
+      repliedTo: messageReply == null
+          ? ''
+          : messageReply.isMe
+          ? senderUsername
+          : recieverUserName ?? '',
+      repliedMessageType: messageReply == null
+          ? MessageEnum.text
+          : messageReply.messageEnum,
     );
     // users -> sender id -> reciever id -> messages -> message id -> store message
     await firestore
@@ -131,6 +146,7 @@ class ChatRepository {
     required String text,
     required String recieverUserId,
     required UserModel senderUser,
+    required MessageReply messageReply,
   }) async {
     /// user-->sender id --> reciever Id --> maessage--> maessage id-->store message
     try {
@@ -152,6 +168,7 @@ class ChatRepository {
         username: senderUser.name,
         recieverUserName: recieverUserData.name,
         senderUsername: senderUser.name,
+        messageReply: messageReply,
       );
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
@@ -177,12 +194,15 @@ class ChatRepository {
   }
 
   void sendFileMessage(
-      {required BuildContext context,
-      required File file,
-      required String recieverUserId,
-      required UserModel senderUserData,
-      required ProviderRef ref,
-      required MessageEnum messageEnum}) async {
+      { required BuildContext context,
+        required File file,
+        required String recieverUserId,
+        required UserModel senderUserData,
+        required ProviderRef ref,
+        required MessageEnum messageEnum,
+        required MessageReply? messageReply,
+        // required bool isGroupChat,
+      }) async {
     try {
       var timeSent = DateTime.now();
       var messageId = const Uuid().v1();
@@ -192,7 +212,7 @@ class ChatRepository {
             'chat/${messageEnum.type}/${senderUserData.uid}/$recieverUserId/$messageId',
             file,
           );
-      UserModel receiverUserData;
+      UserModel? receiverUserData;
       var userDataMap =
           await firestore.collection('users').doc(recieverUserId).get();
       receiverUserData = UserModel.fromMap(userDataMap.data()!);
@@ -226,6 +246,7 @@ class ChatRepository {
         senderUsername: senderUserData.name,
         recieverUserName: receiverUserData.name,
         messageType: messageEnum,
+        messageReply: messageReply,
       );
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
@@ -237,12 +258,12 @@ class ChatRepository {
     required String gifUrl,
     required String recieverUserId,
     required UserModel senderUser,
-    // required MessageReply? messageReply,
+    required MessageReply? messageReply,
     // required bool isGroupChat,
   }) async {
     try {
       var timeSent = DateTime.now();
-      UserModel? recieverUserData;
+      UserModel?recieverUserData;
 
       // if (!isGroupChat) {
       //   var userDataMap =
@@ -268,8 +289,8 @@ class ChatRepository {
         messageType: MessageEnum.gif,
         messageId: messageId,
         username: senderUser.name,
-        // messageReply: messageReply,
-        recieverUserName: recieverUserData!.name,
+        messageReply: messageReply,
+        recieverUserName: recieverUserData.name,
         senderUsername: senderUser.name,
         // isGroupChat: isGroupChat,
       );
