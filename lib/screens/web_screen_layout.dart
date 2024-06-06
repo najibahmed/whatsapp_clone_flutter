@@ -72,7 +72,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
               WebChatAppBar(),
 
               /// chat list
-              Expanded(child: ChatList(recieverUserId: '',)),
+              // Expanded(child: ChatList(recieverUserId: '',)),
 
               /// Message input box
               Container(

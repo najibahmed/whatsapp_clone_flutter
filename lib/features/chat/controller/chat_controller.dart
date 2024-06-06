@@ -41,6 +41,7 @@ class ChatController {
               senderUser: value!,
               messageReply: messageReply!,),
         );
+    ref.read(messageReplyProvider.notifier).update((state) => null);
   }
 
   void sendFileMessage(
@@ -60,6 +61,7 @@ class ChatController {
           messageEnum: messageEnum,
           messageReply: messageReply!,),
     );
+    ref.read(messageReplyProvider.notifier).update((state) => null);
   }
 
   void sendGIFMessage(
@@ -83,7 +85,19 @@ class ChatController {
         // isGroupChat: isGroupChat,
       ),
     );
-    // ref.read(messageReplyProvider.state).update((state) => null);
+    ref.read(messageReplyProvider.notifier).update((state) => null);
+  }
+
+  void setChatMessageSeen(
+      BuildContext context,
+      String recieverUserId,
+      String messageId,
+      ) {
+    chatRepository.setChatMessageSeen(
+      context,
+      recieverUserId,
+      messageId,
+    );
   }
 
 }

@@ -1,24 +1,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:whatsapp_clone_flutter/common/provider/message_reply_provider.dart';
-
+import '../../../common/provider/message_reply_provider.dart';
+import '../../../common/utils/colors.dart';
 import 'display_text_image_gif.dart';
 
 class MessageReplyPreview extends ConsumerWidget {
+  const MessageReplyPreview({Key? key}) : super(key: key);
 
-  const MessageReplyPreview({super.key});
-
-  void cancelReply(WidgetRef ref){
-    ref.read(messageReplyProvider.notifier).update((state) =>null );
+  void cancelReply(WidgetRef ref) {
+    ref.read(messageReplyProvider.notifier).update((state) => null);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final  messageReply = ref.watch(messageReplyProvider);
-    return  Container(
+    final messageReply = ref.watch(messageReplyProvider);
+
+    return Container(
       width: 350,
-      padding: const EdgeInsets.all(8) ,
+      padding: const EdgeInsets.all(8),
+      decoration: const BoxDecoration(
+        color: mobileChatBoxColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
       child: Column(
         children: [
           Row(

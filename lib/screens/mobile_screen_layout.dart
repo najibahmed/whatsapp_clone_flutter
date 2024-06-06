@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone_flutter/common/utils/colors.dart';
+import 'package:whatsapp_clone_flutter/common/utils/utils.dart';
 import 'package:whatsapp_clone_flutter/features/auth/controller/auth_controller.dart';
 import 'package:whatsapp_clone_flutter/features/select_contact/screens/select_contact_screen.dart';
 import 'package:whatsapp_clone_flutter/features/chat/widgets/contact_list.dart';
+import 'package:whatsapp_clone_flutter/features/status/screen/confirm_status_screen.dart';
+
+import '../features/status/screen/status_contact_screen.dart';
 
 class MobileScreenLayout extends ConsumerStatefulWidget {
   const MobileScreenLayout({super.key});
@@ -11,7 +17,9 @@ class MobileScreenLayout extends ConsumerStatefulWidget {
   @override
   ConsumerState<MobileScreenLayout> createState() => _MobileScreenLayoutState();
 }
-class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> with WidgetsBindingObserver {
+
+class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
+    with WidgetsBindingObserver {
   int _currentIndex = 0;
   @override
   void initState() {
@@ -19,17 +27,19 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> with Wi
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
-    switch (state){
+    switch (state) {
       case AppLifecycleState.resumed:
         ref.read(authControllerProvider).setUserState(true);
         break;
@@ -41,8 +51,11 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> with Wi
         break;
     }
   }
+
   final List<Widget> _screens = [
-   ContactList()
+    ContactList(),
+    StatusContactsScreen(),
+    FlutterLogo()
   ];
   @override
   Widget build(BuildContext context) {
@@ -52,23 +65,29 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> with Wi
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: FloatingActionButton(
             backgroundColor: tabColor,
-            onPressed:(){
-              Navigator.pushNamed(context, SelectContactScreen.routeName);
-            } ,
-            child: Icon(Icons.add_comment,color:Colors.black ,),
-
+            onPressed: () async {
+              if (_currentIndex == 0) {
+                Navigator.pushNamed(context, SelectContactScreen.routeName);
+              } else {
+                File? pickedImage = await pickImageFromGallery(context);
+                if (pickedImage != null) {
+                  Navigator.pushNamed(context, ConfirmStatusScreen.routeName,arguments: pickedImage);
+                }
+              }
+            },
+            child: Icon(
+              Icons.add_comment,
+              color: Colors.black,
+            ),
           ),
           bottomNavigationBar: BottomNavigationBar(
-
             unselectedItemColor: Colors.grey,
             selectedItemColor: tabColor,
             elevation: 0,
-            selectedLabelStyle: TextStyle(
-              color: tabColor,
-                fontWeight: FontWeight.bold
-            ),
+            selectedLabelStyle:
+                TextStyle(color: tabColor, fontWeight: FontWeight.bold),
             unselectedLabelStyle: TextStyle(
-                color: Colors.grey,
+              color: Colors.grey,
             ),
             currentIndex: _currentIndex,
             onTap: (index) {
@@ -141,7 +160,7 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> with Wi
             //   ],
             // ),
           ),
-          body:  const ContactList(),
+          body: _screens[_currentIndex],
         ));
   }
 }
