@@ -132,12 +132,23 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
                     Icons.search,
                     color: Colors.grey,
                   )),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: Colors.grey,
-                  )),
+              PopupMenuButton(
+                icon: const Icon(
+                  Icons.more_vert,
+                  color: Colors.grey,
+                ),
+                itemBuilder: (context) => [
+                  // PopupMenuItem(
+                  //   child: const Text(
+                  //     'Create Group',
+                  //   ),
+                  //   onTap: () => Future(
+                  //         // () => Navigator.pushNamed(
+                  //         // context, CreateGroupScreen.routeName),
+                  //   ),
+                  // )
+                ],
+              ),
             ],
             // bottom: const TabBar(
             //   indicatorColor: tabColor,
