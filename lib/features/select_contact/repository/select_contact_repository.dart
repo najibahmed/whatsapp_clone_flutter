@@ -4,9 +4,8 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone_flutter/common/utils/utils.dart';
 import 'package:whatsapp_clone_flutter/models/user_model.dart';
+import '../../chat/screen/mobile_chat_screen.dart';
 
-import '../../../screens/mobile_chat_screen.dart';
-import '../../chat/screen/chat_screen_mobile.dart';
 
 final selectContactsRepositoryProvider = Provider(
     (ref) => SelectContactRepository(firestore: FirebaseFirestore.instance));

@@ -14,11 +14,11 @@ import 'message_reply_preview.dart';
 
 class BottomChatField extends ConsumerStatefulWidget {
   final String recieverUserId;
-  // final bool isGroupChat;
+  final bool isGroupChat;
   const BottomChatField({
     Key? key,
     required this.recieverUserId,
-    // required this.isGroupChat,
+    required this.isGroupChat,
   }) : super(key: key);
 
   @override

@@ -9,6 +9,7 @@ import 'package:whatsapp_clone_flutter/features/select_contact/screens/select_co
 import 'package:whatsapp_clone_flutter/features/chat/widgets/contact_list.dart';
 import 'package:whatsapp_clone_flutter/features/status/screen/confirm_status_screen.dart';
 
+import '../features/group/screens/create_group_screen.dart';
 import '../features/status/screen/status_contact_screen.dart';
 
 class MobileScreenLayout extends ConsumerStatefulWidget {
@@ -53,7 +54,7 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
   }
 
   final List<Widget> _screens = [
-    ContactList(),
+    ContactsList(),
     StatusContactsScreen(),
     FlutterLogo()
   ];
@@ -138,15 +139,15 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
                   color: Colors.grey,
                 ),
                 itemBuilder: (context) => [
-                  // PopupMenuItem(
-                  //   child: const Text(
-                  //     'Create Group',
-                  //   ),
-                  //   onTap: () => Future(
-                  //         // () => Navigator.pushNamed(
-                  //         // context, CreateGroupScreen.routeName),
-                  //   ),
-                  // )
+                  PopupMenuItem(
+                    child: const Text(
+                      'Create Group',
+                    ),
+                    onTap: () => Future(
+                          () => Navigator.pushNamed(
+                          context, CreateGroupScreen.routeName),
+                    ),
+                  )
                 ],
               ),
             ],

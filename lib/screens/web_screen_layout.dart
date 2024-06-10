@@ -46,7 +46,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
 
                 /// Web search
                 WebSearchBar(),
-                ContactList(),
+                ContactsList(),
 
                 /// Web Screen
               ],

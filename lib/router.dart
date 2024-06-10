@@ -5,11 +5,13 @@ import 'package:whatsapp_clone_flutter/common/widgets/error.dart';
 import 'package:whatsapp_clone_flutter/features/auth/screens/login_screen.dart';
 import 'package:whatsapp_clone_flutter/features/auth/screens/otp_screen.dart';
 import 'package:whatsapp_clone_flutter/features/auth/screens/user_information_screen.dart';
-import 'package:whatsapp_clone_flutter/features/chat/screen/chat_screen_mobile.dart';
+import 'package:whatsapp_clone_flutter/features/group/screens/create_group_screen.dart';
 import 'package:whatsapp_clone_flutter/features/select_contact/screens/select_contact_screen.dart';
 import 'package:whatsapp_clone_flutter/features/status/screen/confirm_status_screen.dart';
 import 'package:whatsapp_clone_flutter/features/status/screen/status_screen.dart';
 import 'package:whatsapp_clone_flutter/models/status_model.dart';
+
+import 'features/chat/screen/mobile_chat_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -25,11 +27,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
           builder: (context) => const UserInformationScreen());
     case StatusScreen.routeName:
-      final status = settings.arguments as Status;
+    final status = settings.arguments as Status;
+    return MaterialPageRoute(
+        builder: (context) => StatusScreen(
+          status: status,
+        ));
+    case CreateGroupScreen.routeName:
       return MaterialPageRoute(
-          builder: (context) => StatusScreen(
-                status: status,
-              ));
+          builder: (context) => const CreateGroupScreen(
+          ));
     case SelectContactScreen.routeName:
       return MaterialPageRoute(
           builder: (context) => const SelectContactScreen());
@@ -44,10 +50,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       final arguments = settings.arguments as Map<String, dynamic>;
       final name = arguments['name'];
       final uid = arguments['uid'];
+      final isGroupChat = arguments['isGroupChat'];
+      final profilePic = arguments['profilePic'];
       return MaterialPageRoute(
           builder: (context) => MobileChatScreen(
                 name: name,
                 uid: uid,
+                isGroupChat: isGroupChat,
+                profilePic: profilePic,
               ));
     default:
       return MaterialPageRoute(
