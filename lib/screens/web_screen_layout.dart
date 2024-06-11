@@ -5,9 +5,10 @@ import 'package:whatsapp_clone_flutter/features/chat/widgets/contact_list.dart';
 
 import '../common/utils/colors.dart';
 import '../features/chat/widgets/chat_list.dart';
-import '../widgets/web_chat_app_bar.dart';
-import '../widgets/web_profile_bar.dart';
-import '../widgets/web_search_bar.dart';
+import '../widgets for web/web_chat_app_bar.dart';
+import '../widgets for web/web_profile_bar.dart';
+import '../widgets for web/web_search_bar.dart';
+
 
 class WebScreenLayout extends StatefulWidget {
   const WebScreenLayout({super.key});
